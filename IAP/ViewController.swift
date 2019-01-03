@@ -13,23 +13,29 @@ import SwiftyStoreKit
 class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTransactionObserver {
 
     //product identifier
-    let COINS_PRODUCT_ID = "com.testnixsolutions.SergP.PushNotifications.Coins"
-    let PREMIUM_PRODUCT_ID = "com.testnixsolutions.SergP.PushNotifications.FirstPurchase"
-    let SUBSCRIPTION_NON_AUTORENEW = "com.testnixsolutions.SergP.PushNotifications.subscriptions2"
-    let SUBSCRIPTION_AUTORENEW = "com.testnixsolutions.SergP.PushNotifications.SubscriptionAutoreNew"
+    fileprivate let COINS_PRODUCT_ID = "com.testnixsolutions.SergP.PushNotifications.Coins"
+    fileprivate let PREMIUM_PRODUCT_ID = "com.testnixsolutions.SergP.PushNotifications.FirstPurchase"
+    fileprivate let SUBSCRIPTION_NON_AUTORENEW = "com.testnixsolutions.SergP.PushNotifications.subscriptions2"
+    fileprivate let SUBSCRIPTION_AUTORENEW = "com.testnixsolutions.SergP.PushNotifications.SubscriptionAutoreNew"
 
-    let shared_secret_key = "3bfef31710684e4d9599817091788a4b"
+    fileprivate let shared_secret_key = "3bfef31710684e4d9599817091788a4b"
 
-    var productsRequest = SKProductsRequest()
-    var iapProducts = [SKProduct]()
-    var nonConsumablePurchaseMade = UserDefaults.standard.bool(forKey: "nonConsumablePurchaseMade")
-    var coins = UserDefaults.standard.integer(forKey: "coins")
+    fileprivate var productsRequest = SKProductsRequest()
+    fileprivate var iapProducts = [SKProduct]()
+    fileprivate var nonConsumablePurchaseMade = UserDefaults.standard.bool(forKey: "nonConsumablePurchaseMade")
+    fileprivate var coins = UserDefaults.standard.integer(forKey: "coins")
 
-    @IBOutlet weak var coinsCount: UILabel!
-    @IBOutlet weak var nextLevel: UIButton!
-    @IBOutlet weak var labelDesc1: UILabel!
-    @IBOutlet weak var labelDesc2: UILabel!
-    @IBOutlet weak var expirityLabel: UILabel!
+    @IBOutlet fileprivate weak var coinsCount: UILabel!
+    @IBOutlet fileprivate weak var nextLevel: UIButton!
+    @IBOutlet fileprivate weak var labelPurchaseNonConsumable: UILabel!
+    @IBOutlet fileprivate weak var labelSubscriptionAutorenew: UILabel!
+    @IBOutlet fileprivate weak var labelSubscriptionNonAutorenew: UILabel!
+
+    @IBOutlet fileprivate weak var labelPrice1: UILabel!
+    @IBOutlet fileprivate weak var labelPrice2: UILabel!
+    @IBOutlet fileprivate weak var labelPrice3: UILabel!
+    @IBOutlet fileprivate weak var labelPrice4: UILabel!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +48,7 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
         coinsCount.text = String(coins)
         if nonConsumablePurchaseMade {
             nextLevel.isEnabled = true
+            labelPurchaseNonConsumable.text = "yes"
         }
 
         // Fetch IAP Products available
@@ -71,6 +78,14 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
     @IBAction func byLevel(_ sender: Any) {
         purchaseMyProduct(product: iapProducts[1])
     }
+
+    @IBAction func subscriptionNONAutorenew(_ sender: Any) {
+        purchaseMyProduct(product: iapProducts[3])
+    }
+
+    @IBAction func subscriptionAutorenew(_ sender: Any) {
+        purchaseMyProduct(product: iapProducts[2])
+    }
     //MARK: - function for check make purchase and buy product
     func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
     //function for buy product by product id
@@ -94,9 +109,19 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        nonConsumablePurchaseMade = true
-        UserDefaults.standard.set(nonConsumablePurchaseMade, forKey: "nonConsumablePurchaseMade")
-        nextLevel.isEnabled = true
+        print(queue.transactions)
+        let queueOfTransactions = queue.transactions
+        for productIdentifier in queueOfTransactions {
+            if productIdentifier.payment.productIdentifier == PREMIUM_PRODUCT_ID {
+                nonConsumablePurchaseMade = true
+                UserDefaults.standard.set(nonConsumablePurchaseMade, forKey: "nonConsumablePurchaseMade")
+                nextLevel.isEnabled = true
+                labelPurchaseNonConsumable.text = "yes"
+            } else if productIdentifier.payment.productIdentifier == SUBSCRIPTION_AUTORENEW {
+                checkSubscriptionExpirityDate()
+            }
+        }
+
     }
     //MARK: - SwiftyStoreKit function for check expirity date subscription
     //check expirity date of subscription by pod SwiftyStoreKit
@@ -105,7 +130,7 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
         SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
             switch result {
             case .success(let receipt):
-                let productId = self.COINS_PRODUCT_ID//product identifier for check
+                let productId = self.SUBSCRIPTION_AUTORENEW //product identifier for check
                 // Verify the purchase of a Subscription
                 let purchaseResult = SwiftyStoreKit.verifySubscription(
                     ofType: .autoRenewable ,//.nonRenewing(validDuration: 3600 * 24 * 30), // or .nonRenewing (see below)//type of subscription
@@ -114,11 +139,12 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
                 //check purchase status
                 switch purchaseResult {
                 case .purchased(let expiryDate, let items):
-                    self.expirityLabel.text = "NO expirity"
+                    //self.expirityLabel.text = "NO expirity"
                     print("\(productId) is valid until \(expiryDate)\n\(items)\n")
+                    self.labelSubscriptionAutorenew.text = "yes"
                 case .expired(let expiryDate, let items):
-                    self.expirityLabel.text = "expirity"
-                    print("\(productId) is expired since \(expiryDate)\n\(items)\n")
+                    //self.expirityLabel.text = "expirity"
+                    print("\(productId) is expired since \(expiryDate)")
                 case .notPurchased:
                     print("The user has never purchased \(productId)")
                 }
@@ -144,10 +170,10 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
             let price1Str = numberFormatter.string(from: firstProduct.price)
 
             // Show its description
-            labelDesc1.text = firstProduct.localizedDescription + " price \(price1Str!)"
+            labelPrice1.text = firstProduct.localizedDescription + " price \(price1Str!)"
             // ------------------------------------------------
 
-            // 2nd IAP Product (Non-Consumable) ------------------------------
+            // 2nd IAP Product ------------------------------
             let secondProd = response.products[1] as SKProduct
 
             // Get its price from iTunes Connect
@@ -155,7 +181,27 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
             let price2Str = numberFormatter.string(from: secondProd.price)
 
             // Show its description
-            labelDesc2.text = secondProd.localizedDescription + " price \(price2Str!)"
+            labelPrice2.text = secondProd.localizedDescription + " price \(price2Str!)"
+            // ------------------------------------
+            // 3nd IAP Product ------------------------------
+            let thirdProd = response.products[2] as SKProduct
+
+            // Get its price from iTunes Connect
+            numberFormatter.locale = thirdProd.priceLocale
+            let price3Str = numberFormatter.string(from: thirdProd.price)
+
+            // Show its description
+            labelPrice4.text = secondProd.localizedDescription + " price \(price3Str!)"
+            // ------------------------------------
+            // 4nd IAP Product ------------------------------
+            let fourthProd = response.products[3] as SKProduct
+
+            // Get its price from iTunes Connect
+            numberFormatter.locale = fourthProd.priceLocale
+            let price4Str = numberFormatter.string(from: fourthProd.price)
+
+            // Show its description
+            labelPrice3.text = secondProd.localizedDescription + " price \(price4Str!)"
             // ------------------------------------
         }
     }
@@ -176,8 +222,6 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
                         UserDefaults.standard.set(coins, forKey: "coins")
                         coinsCount.text = "COINS: \(coins)"
 
-
-
                         // The Non-Consumable product (Premium) has been purchased!
                     } else if trans.payment.productIdentifier == PREMIUM_PRODUCT_ID {
 
@@ -187,6 +231,11 @@ class ViewController: UIViewController, SKProductsRequestDelegate, SKPaymentTran
 
                         print("Premium version PURCHASED!")
                         nextLevel.isEnabled = true
+                        labelPurchaseNonConsumable.text = "yes"
+                    } else if trans.payment.productIdentifier == SUBSCRIPTION_NON_AUTORENEW {
+                        labelSubscriptionNonAutorenew.text = "yes"
+                    } else if trans.payment.productIdentifier == SUBSCRIPTION_AUTORENEW {
+                        labelSubscriptionAutorenew.text = "yes"
                     }
 
                     break

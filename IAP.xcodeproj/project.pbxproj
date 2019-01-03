@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		032AF24B0902C539FB4E5C5E /* Pods_IAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13FC9F80FF2072FB91E42AB7 /* Pods_IAP.framework */; };
 		DE1595E021D51DF200039619 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1595DF21D51DF200039619 /* StoreKit.framework */; };
 		DE91D4F221D515CD00376C49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91D4F121D515CD00376C49 /* AppDelegate.swift */; };
 		DE91D4F421D515CD00376C49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91D4F321D515CD00376C49 /* ViewController.swift */; };
@@ -16,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		13FC9F80FF2072FB91E42AB7 /* Pods_IAP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IAP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		632837EC38DC97AFAC32EFC9 /* Pods-IAP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IAP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-IAP/Pods-IAP.debug.xcconfig"; sourceTree = "<group>"; };
 		DE1595DF21D51DF200039619 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		DE91D4EE21D515CD00376C49 /* IAP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IAP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE91D4F121D515CD00376C49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +27,7 @@
 		DE91D4F821D515CF00376C49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE91D4FB21D515CF00376C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE91D4FD21D515CF00376C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F489085B8861DB0508B3ED5D /* Pods-IAP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IAP.release.xcconfig"; path = "Pods/Target Support Files/Pods-IAP/Pods-IAP.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,16 +36,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE1595E021D51DF200039619 /* StoreKit.framework in Frameworks */,
+				032AF24B0902C539FB4E5C5E /* Pods_IAP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B6C0BA33491B5593D2AD2B1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				632837EC38DC97AFAC32EFC9 /* Pods-IAP.debug.xcconfig */,
+				F489085B8861DB0508B3ED5D /* Pods-IAP.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		DE1595DE21D51DF200039619 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				DE1595DF21D51DF200039619 /* StoreKit.framework */,
+				13FC9F80FF2072FB91E42AB7 /* Pods_IAP.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -52,6 +67,7 @@
 				DE91D4F021D515CD00376C49 /* IAP */,
 				DE91D4EF21D515CD00376C49 /* Products */,
 				DE1595DE21D51DF200039619 /* Frameworks */,
+				3B6C0BA33491B5593D2AD2B1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DE91D50021D515CF00376C49 /* Build configuration list for PBXNativeTarget "IAP" */;
 			buildPhases = (
+				C5175470A0378F2EA634EBAC /* [CP] Check Pods Manifest.lock */,
 				DE91D4EA21D515CD00376C49 /* Sources */,
 				DE91D4EB21D515CD00376C49 /* Frameworks */,
 				DE91D4EC21D515CD00376C49 /* Resources */,
+				86B84CD129736A301CBED8F8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -146,6 +164,53 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		86B84CD129736A301CBED8F8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-IAP/Pods-IAP-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-IAP/Pods-IAP-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5175470A0378F2EA634EBAC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-IAP-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DE91D4EA21D515CD00376C49 /* Sources */ = {
@@ -297,6 +362,7 @@
 		};
 		DE91D50121D515CF00376C49 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 632837EC38DC97AFAC32EFC9 /* Pods-IAP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
@@ -317,6 +383,7 @@
 		};
 		DE91D50221D515CF00376C49 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F489085B8861DB0508B3ED5D /* Pods-IAP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
